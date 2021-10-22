@@ -81,10 +81,30 @@ datatable( casos_, options = list(
 
 
 ```
-```{r}
-ggplot(casos_, aes(x= canton, y= positivos)) + geom_col() %>%
-  config(locale = "es")
-```
 
+```{r}
+ggplot(casos_, aes(x= canton, y= positivos)) +
+  geom_col( width = 0.5, fill= "#008080") +
+  ggtitle("Casos Positivos por cantón") +
+  xlab("Cantón") +
+  ylab("Cantidad de casos positivos") +
+   theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    text = element_text(size=8),
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)
+  ) 
+```
+```{r}
+ggplot(casos_, aes(x= canton, y= activos)) +
+  geom_col( width = 0.5, fill= "#00FF7F") +
+  ggtitle("Casos Activos por cantón") +
+  xlab("Cantón") +
+  ylab("Cantidad de casos activos") +
+   theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    text = element_text(size=8),
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)
+  ) 
+```
 
 
