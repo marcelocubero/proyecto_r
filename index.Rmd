@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 ```{r paquetes , warning=FALSE, message=FALSE}
-
+defaultEncoding <- "UTF8"
 library(dplyr)
 library(sf)
 library(terra)
@@ -18,6 +18,7 @@ library(DT)
 library(ggplot2)
 library(plotly)
 library(leaflet)
+
 ```
 
 ```{r datos , warning=FALSE, message=FALSE}
@@ -31,7 +32,8 @@ casos <-
   st_transform(4326)
 
 casos_ <-
-    st_read("/vsicurl/https://marcelocubero.github.io/capas_proyecto/casos_.csv")
+    read.csv( file= "https://marcelocubero.github.io/capas_proyecto/casos_.csv",
+              sep = ",", encoding = "UTF-8") 
 
 
 fallecidos <- rast("/vsicurl/https://marcelocubero.github.io/capas_proyecto/fallecidos.tif")
@@ -71,7 +73,7 @@ leaflet() %>%
 
 
 casos_ %>%
-  select(canton, activos, positivos) %>%
+  select(Cantón= canton,Provincia= provincia, Casos_Activos= activos, Casos_Positivos= positivos) %>%
 datatable( casos_, options = list(
   language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json'),
   pageLength = 5
@@ -79,15 +81,10 @@ datatable( casos_, options = list(
 
 
 ```
-
-
-
-
-
-
-
-
-
+```{r}
+ggplot(casos_, aes(x= canton, y= positivos)) + geom_col() %>%
+  config(locale = "es")
+```
 
 
 
