@@ -30,6 +30,10 @@ casos <-
   casos %>%
   st_transform(4326)
 
+casos_ <-
+    st_read("/vsicurl/https://marcelocubero.github.io/capas_proyecto/casos_.csv")
+
+
 fallecidos <- rast("/vsicurl/https://marcelocubero.github.io/capas_proyecto/fallecidos.tif")
 
 ```
@@ -66,17 +70,15 @@ leaflet() %>%
 
 
 
-casos %>%
-  st_drop_geometry() %>%
+casos_ %>%
   select(canton, activos, positivos) %>%
-datatable( casos, options = list(
+datatable( casos_, options = list(
   language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json'),
   pageLength = 5
 ))
 
 
 ```
-
 
 
 
