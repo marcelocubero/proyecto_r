@@ -1,0 +1,91 @@
+---
+title: "Untitled"
+author: "Marcelo Cubero Sibaja"
+date: "22/10/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r paquetes , warning=FALSE, message=FALSE}
+
+library(dplyr)
+library(sf)
+library(terra)
+library(raster)
+library(DT)
+library(ggplot2)
+library(plotly)
+library(leaflet)
+```
+
+```{r datos , warning=FALSE, message=FALSE}
+casos <-
+  st_read(
+    "/vsicurl/https://marcelocubero.github.io/capas_proyecto/casos.geojson",
+    quiet = TRUE
+  )
+casos <-
+  casos %>%
+  st_transform(4326)
+
+fallecidos <- rast("/vsicurl/https://marcelocubero.github.io/capas_proyecto/fallecidos.tif")
+
+```
+
+```{r mapa , warning=FALSE, message=FALSE}
+
+fallecidos_rl <- raster::raster(fallecidos)
+
+
+leaflet() %>%
+  addTiles() %>%
+  addRasterImage(
+    fallecidos_rl, 
+    opacity = 0.6
+  ) %>%    
+  addPolygons(
+    data = casos,
+    color = "black",
+    fillColor = "transparent",
+    stroke = TRUE,
+    weight = 1.0,
+  )
+
+
+
+
+
+
+
+
+```
+
+```{r consulta , warning=FALSE, message=FALSE}
+
+
+
+casos %>%
+  st_drop_geometry() %>%
+  select(canton, activos, positivos) %>%
+datatable( casos, options = list(
+  language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json'),
+  pageLength = 5
+))
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
