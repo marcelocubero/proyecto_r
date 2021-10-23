@@ -216,6 +216,7 @@ leaflet() %>%
     title = "Casos Positivos"
   ) %>%
   addLayersControl(
+    "bottomleft",
     baseGroups = c("OSM", "NatGeo", "CartoDB-Black"),
     overlayGroups = c("Fallecidos", "Casos Activos", "Casos Positivos" ),
     options = layersControlOptions(collapsed = FALSE)
