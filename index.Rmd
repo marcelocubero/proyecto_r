@@ -46,20 +46,27 @@ fallecidos_rl <- raster::raster(fallecidos)
 
 
 leaflet() %>%
-  addTiles() %>%
+  addTiles(group="OSM") %>% 
+  addProviderTiles(providers$Esri.NatGeoWorldMap , group="NatGeo") %>% 
+  addProviderTiles(providers$CartoDB.DarkMatter, group="CartoDB-Black") %>%
   addRasterImage(
     fallecidos_rl, 
-    opacity = 0.6
-  ) %>%    
+    opacity = 0.7,
+    group= "Fallecidos",
+  ) %>%
   addPolygons(
     data = casos,
     color = "black",
     fillColor = "transparent",
     stroke = TRUE,
     weight = 1.0,
-  )
-
-
+    group= "Casos"
+  )  %>%
+  addLayersControl(
+    baseGroups = c("OSM", "NatGeo", "CartoDB-Black"),
+    overlayGroups = c("Fallecidos", "Casos"),
+    options = layersControlOptions(collapsed = FALSE)
+  ) 
 
 
 
