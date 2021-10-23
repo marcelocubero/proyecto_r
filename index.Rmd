@@ -161,43 +161,66 @@ leaflet() %>%
 
 
 
-```{r}
+```{r , warning=FALSE, message=FALSE}
 fallecidos_rl <- raster::raster(fallecidos)
 bins <- c(10, 100, 500, 1000, 4000, 7600)
-pal <- colorBin("Blues", domain = casos$activos, bins = bins)
+pal <- colorBin("Set1", domain = casos$activos, bins = bins)
+bins3 <- c(1, 5000, 10000, 20000, 40000, 52000)
+pal3 <- colorBin("Pastel1", domain = casos$positivos, bins = bins3)
 at <- seq(1:800)
-pal1 <- colorBin('Accent', domain = at ,na.color = "transparent")
+pal2 <- colorBin('Accent', domain = at , na.color = "transparent")
 
 
 leaflet() %>%
-  addTiles(group="OSM") %>% 
-  addProviderTiles(providers$Esri.NatGeoWorldMap , group="NatGeo") %>% 
-  addProviderTiles(providers$CartoDB.DarkMatter, group="CartoDB-Black") %>%
-  addRasterImage(
-    fallecidos_rl, 
-    opacity = 1,
-    group= "Fallecidos",
-    colors = pal1
-  ) %>%
-  addLegend("bottomleft", pal = pal1, values = at, title = "Fallecidos") %>%
+  addTiles(group = "OSM") %>%
+  addProviderTiles(providers$Esri.NatGeoWorldMap , group = "NatGeo") %>%
+  addProviderTiles(providers$CartoDB.DarkMatter, group = "CartoDB-Black") %>%
+  addRasterImage(fallecidos_rl,
+                 opacity = 1,
+                 group = "Fallecidos",
+                 colors = pal2) %>%
+  addLegend("bottomleft",
+            pal = pal2,
+            values = at,
+            title = "Fallecidos") %>%
   addPolygons(
     data = casos,
     color = "black",
-    fillColor = ~pal(activos),
-    fillOpacity = 0.7,
+    fillColor = ~ pal(activos),
+    fillOpacity = 1,
     weight = 1,
     opacity = 1,
     stroke = TRUE,
-    group= "Casos Activos"
+    group = "Casos Activos"
   ) %>%
-  addLegend(pal = pal, values = casos$activos, opacity = 0.7, title = "Casos Activos") %>%
+  addLegend(
+    pal = pal,
+    values = casos$activos,
+    opacity = 0.7,
+    title = "Casos Activos"
+  ) %>%
+  addPolygons(
+    data = casos,
+    color = "black",
+    fillColor = ~ pal3(positivos),
+    fillOpacity = 1,
+    weight = 1,
+    opacity = 1,
+    stroke = TRUE,
+    group = "Casos Positivos"
+  ) %>%
+  addLegend(
+    pal = pal3,
+    values = casos$activos,
+    opacity = 0.7,
+    title = "Casos Positivos"
+  ) %>%
   addLayersControl(
     baseGroups = c("OSM", "NatGeo", "CartoDB-Black"),
-    overlayGroups = c("Fallecidos", "Casos Activos"),
+    overlayGroups = c("Fallecidos", "Casos Activos", "Casos Positivos" ),
     options = layersControlOptions(collapsed = FALSE)
   ) %>%
   addScaleBar("bottomright")
-
 
 ```
 
